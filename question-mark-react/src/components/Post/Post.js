@@ -1,8 +1,5 @@
 import {useState,useEffect} from "react";
-import { ReactDOM } from "react";
-import "./Post.css"
 import {Link} from "react-router-dom";
-
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -18,12 +15,19 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CommentIcon from '@mui/icons-material/Comment';
 
-// const useStyles = makeStyles(() => ({
+// const useStyles = makeStyles((theme) => ({
 //   root:{
 //     width: 800,
 //     textAlign: "left"
 //   }
 // }));
+
+const MyCard = styled(Card)({
+    width: 800,
+    display: "block",
+    margin: '20px' ,
+    textAlign: "left"
+});
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -50,7 +54,7 @@ export default function Post(props){
  }
 
  return(
-        <Card className="card" >
+        <MyCard>
             <CardHeader
                 avatar={
                 <Link className="link" to = {{pathname : '/users/' + userId}}>
@@ -86,6 +90,6 @@ export default function Post(props){
 
                 </CardContent>
             </Collapse>
-      </Card>
+      </MyCard>
  );
             }

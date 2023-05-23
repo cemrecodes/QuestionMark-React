@@ -1,14 +1,21 @@
 import * as React from 'react';
-import Container from '@mui/material/Container';
 import Post from "../Post/Post"
 import {useState,useEffect} from "react";
-import "./Home.css"
+import { styled } from "@mui/system";
+
+const MyDiv = styled("div")({
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#d5dde3"
+});
 
 function Home(){
     const [error,setError] = useState(null);
     const [isLoaded,setIsLoaded] = useState(false);
     const [postList, setPostList] = useState([]);
-    
+
     useEffect(() => {
      fetch("/posts")
      .then( res => res.json())
@@ -32,15 +39,13 @@ function Home(){
     }
     else{
      return(
-        <React.Fragment>
-            <Container fixed className = "container" maxWidth="sm">
+            <MyDiv>
                 { postList.map( 
                     post => (
                     <Post userId = {post.userId} userName = {post.userName} title = {post.title} text={post.text}></Post>
                     ))
                 }
-            </Container>
-        </React.Fragment>
+            </MyDiv>
         );
     }
 }
