@@ -15,18 +15,11 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CommentIcon from '@mui/icons-material/Comment';
 
-// const useStyles = makeStyles((theme) => ({
-//   root:{
-//     width: 800,
-//     textAlign: "left"
-//   }
-// }));
-
 const MyCard = styled(Card)({
     width: 800,
     display: "block",
     margin: '20px' ,
-    textAlign: "left"
+    textAlign: "left",
 });
 
 const ExpandMore = styled((props) => {
@@ -40,6 +33,10 @@ const ExpandMore = styled((props) => {
     }),
   }));
 
+const StyledCardActions = styled(CardActions)({
+  display: "flex",
+  justifyContent: "space-between"
+});
 
 export default function Post(props){
  const {title, text, userId, userName} = props;
@@ -70,7 +67,7 @@ export default function Post(props){
                 {text}
                 </Typography>
             </CardContent>
-            <CardActions disableSpacing>
+            <StyledCardActions disableSpacing>
                 <IconButton 
                 onClick={handleLike}
                 aria-label="add to favorites">
@@ -80,11 +77,11 @@ export default function Post(props){
                     expand={expanded}
                     onClick={handleExpandClick}
                     aria-expanded={expanded}
-                    aria-label="show more"
+                    aria-label="show comments"
                 >
                 <CommentIcon/>
                 </IconButton>
-            </CardActions>
+            </StyledCardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
 
