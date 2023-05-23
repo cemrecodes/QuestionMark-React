@@ -36,7 +36,7 @@ function Home(){
             <Container fixed className = "container" maxWidth="sm">
                 { postList.map( 
                     post => (
-                    <Post title={post.title} text={post.text}></Post>
+                    <Post userId = {post.userId} userName = {post.userName} title = {post.title} text={post.text}></Post>
                     ))
                 }
             </Container>
