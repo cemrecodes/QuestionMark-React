@@ -2,6 +2,7 @@ import * as React from 'react';
 import Post from "../Post/Post"
 import {useState,useEffect} from "react";
 import { styled } from "@mui/system";
+import PostForm from '../Post/PostForm';
 
 const MyDiv = styled("div")({
     display: "flex",
@@ -16,20 +17,24 @@ function Home(){
     const [isLoaded,setIsLoaded] = useState(false);
     const [postList, setPostList] = useState([]);
 
+    const refreshPosts = () =>{
+        fetch("/posts")
+        .then( res => res.json())
+        .then(
+            (result) => {
+                setIsLoaded(true);
+                setPostList(result)
+            },
+            (error) =>{
+                setIsLoaded(true);
+                setError(error);
+            }
+            )
+    }
+
     useEffect(() => {
-     fetch("/posts")
-     .then( res => res.json())
-     .then(
-         (result) => {
-             setIsLoaded(true);
-             setPostList(result)
-         },
-         (error) =>{
-             setIsLoaded(true);
-             setError(error);
-         }
-         )
-    },[])
+     refreshPosts()
+    },[postList])
  
     if(error){
      return <div>Error</div>
@@ -40,9 +45,13 @@ function Home(){
     else{
      return(
             <MyDiv>
+                <PostForm userId = {1} userName = "cemre"  refreshPosts = {refreshPosts}/>
                 { postList.map( 
                     post => (
-                    <Post userId = {post.userId} userName = {post.userName} title = {post.title} text={post.text}></Post>
+                    <Post userId = {post.userId} userName = {post.userName} 
+                    title = {post.title} text={post.text}>
+
+                    </Post>
                     ))
                 }
             </MyDiv>

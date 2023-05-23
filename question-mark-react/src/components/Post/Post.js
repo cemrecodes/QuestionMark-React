@@ -12,7 +12,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CommentIcon from '@mui/icons-material/Comment';
 
 const MyCard = styled(Card)({
@@ -55,7 +54,7 @@ export default function Post(props){
             <CardHeader
                 avatar={
                 <Link className="link" to = {{pathname : '/users/' + userId}}>
-                  <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                  <Avatar sx={{ bgcolor: "pink" }} aria-label="icon">
                       {userName.charAt(0).toUpperCase()}
                   </Avatar>
                 </Link>
