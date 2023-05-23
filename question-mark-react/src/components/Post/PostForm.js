@@ -10,10 +10,15 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
 import { Button, InputAdornment, OutlinedInput } from "@mui/material";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const MyCard = styled(Card)({
     width: 800,
@@ -42,6 +47,7 @@ export default function PostForm(props){
  const {userId, userName, refreshPosts} = props;
  const [text, setText] = useState("");
  const [title, setTitle] = useState("");
+ const [isSent, setIsSent] = useState(false);
 
  const savePost = () =>{
     fetch("/posts",
@@ -62,16 +68,36 @@ export default function PostForm(props){
  const handleSubmit = () => {
     console.log(text,title)
     savePost();
+    setIsSent(true);
+    setTitle("");
+    setText("");
     refreshPosts();
  }
  const handleTitle = (value) => {
     setTitle(value);
+    setIsSent(false);
  }
  const handleText = (value) => {
     setText(value);
+    setIsSent(false);
  }
 
+ const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setIsSent(false);
+  };
+
  return(
+    <div>
+        <Snackbar open={isSent} autoHideDuration={1300} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                Your post has been sent!
+            </Alert>
+        </Snackbar>
+    
         <MyCard>
             <CardHeader
                 avatar={
@@ -87,6 +113,7 @@ export default function PostForm(props){
                 placeholder = "Title"
                 inputProps = {{maxLength : 25}}
                 fullWidth
+                value = {title}
                 onChange = { (i) => handleTitle(i.target.value)}
                 >
                 </OutlinedInput>
@@ -100,6 +127,7 @@ export default function PostForm(props){
                 placeholder = "Text"
                 inputProps = {{maxLength : 250}}
                 fullWidth
+                value = {text}
                 onChange = { (i) => handleText(i.target.value)}
                 endAdornment = {
                     <InputAdornment position = "end">
@@ -117,5 +145,6 @@ export default function PostForm(props){
                 </Typography>
             </CardContent>
       </MyCard>
+    </div>
  );
 }

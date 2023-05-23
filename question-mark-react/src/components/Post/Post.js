@@ -50,6 +50,7 @@ export default function Post(props){
  }
 
  return(
+  <div>
         <MyCard>
             <CardHeader
                 avatar={
@@ -87,5 +88,6 @@ export default function Post(props){
                 </CardContent>
             </Collapse>
       </MyCard>
+      </div>
  );
-            }
+}
