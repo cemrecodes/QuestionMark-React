@@ -1,4 +1,4 @@
-import {useState,useEffect} from "react";
+import {useState, useRef, useEffect} from "react";
 import {Link} from "react-router-dom";
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
@@ -10,9 +10,10 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
+import { Container } from "@mui/material";
+import Comment from "../Comment/Comment";
 
 const MyCard = styled(Card)({
     width: 800,
@@ -38,16 +39,46 @@ const StyledCardActions = styled(CardActions)({
 });
 
 export default function Post(props){
- const {title, text, userId, userName} = props;
+ const {title, text, userId, userName, postId} = props;
  const [expanded, setExpanded] = React.useState(false);
  const [liked, setLiked] = useState(false);
+ const [error, setError] = useState(false);
+ const [isLoaded, setIsLoaded] = useState(false);
+ const [commentList, setCommentList] = useState([]);
+ const [postList, setPostList] = useState(false);
+ const isInitialMount = useRef(true);
+
  const handleExpandClick = () => {
    setExpanded(!expanded);
+   refreshComments();
+   console.log(commentList);
  };
 
  const handleLike = () => {
   setLiked(!liked);
  }
+
+ const refreshComments = () =>{
+  fetch("/comments?postId=" + postId)
+  .then( res => res.json())
+  .then(
+      (result) => {
+          setIsLoaded(true);
+          setCommentList(result)
+      },
+      (error) =>{
+          setIsLoaded(true);
+          setError(error);
+      }
+      )
+}
+
+useEffect(() => {
+  if(isInitialMount.current)
+    isInitialMount.current = false;
+  else
+    refreshComments();
+ },[commentList])
 
  return(
   <div>
@@ -83,9 +114,13 @@ export default function Post(props){
                 </IconButton>
             </StyledCardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>
-
-                </CardContent>
+                <Container fixed>
+                {
+                  error? "error":
+                  isLoaded? commentList.map(comment => (
+                    <Comment userId = {1} userName = {"USER"} text = {comment.text}></Comment>
+                  )) : "Loading"}
+                </Container>
             </Collapse>
       </MyCard>
       </div>

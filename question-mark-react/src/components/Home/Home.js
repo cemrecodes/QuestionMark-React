@@ -48,7 +48,7 @@ function Home(){
                 <PostForm userId = {1} userName = "cemre"  refreshPosts = {refreshPosts}/>
                 { postList.map( 
                     post => (
-                    <Post userId = {post.userId} userName = {post.userName} 
+                    <Post postId = {post.id} userId = {post.userId} userName = {post.userName} 
                     title = {post.title} text={post.text}>
 
                     </Post>
