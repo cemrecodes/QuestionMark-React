@@ -14,6 +14,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
 import { Container } from "@mui/material";
 import Comment from "../Comment/Comment";
+import CommentForm from "../Comment/CommentForm";
 
 const MyCard = styled(Card)({
     width: 800,
@@ -120,6 +121,7 @@ useEffect(() => {
                   isLoaded? commentList.map(comment => (
                     <Comment userId = {1} userName = {"USER"} text = {comment.text}></Comment>
                   )) : "Loading"}
+                  <CommentForm userId = {1} userName = {"USER"} postId = {postId}></CommentForm>
                 </Container>
             </Collapse>
       </MyCard>
