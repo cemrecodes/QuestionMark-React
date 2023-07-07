@@ -50,6 +50,7 @@ export default function Post(props){
  const [likeCount,setLikeCount] = useState(likes.length);
  const isInitialMount = useRef(true);
  const [likeId, setLikeId] = useState(null);
+ let disabled = localStorage.getItem("currentUser") == null? true:false;
 
  const handleExpandClick = () => {
    setExpanded(!expanded);
@@ -89,10 +90,11 @@ const saveLike = () => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": localStorage.getItem("tokenKey")
     },
     body: JSON.stringify({
       postId: postId,
-      userId: userId,
+      userId: localStorage.getItem("currentUser"),
     }),
   })
   .then((res) => res.json())
@@ -102,12 +104,15 @@ const saveLike = () => {
 const deleteLike = () => {
   fetch("/likes/" + likeId,{
     method: "DELETE",
+    headers: {
+      "Authorization": localStorage.getItem("tokenKey")
+    }
   })
   .catch((err) => console.log(err))
 }
 
 const checkLikes = () => {
-  var likeControl = likes.find((like => like.userId === userId));
+  var likeControl = likes.find((like => "" + like.userId === localStorage.getItem("currentUser")));
   console.log("likeControl:", likeControl);
   if(likeControl != null){
     setLikeId(likeControl.id);
@@ -143,12 +148,20 @@ useEffect(() => {
                 </Typography>
             </CardContent>
             <StyledCardActions disableSpacing>
+              { disabled? 
+                <IconButton 
+                onClick={handleLike}
+                aria-label="add to favorites">
+                    <FavoriteIcon style = {isLiked? {color: "red"} : null}/>
+                { likeCount }
+                </IconButton>:
                 <IconButton 
                 onClick={handleLike}
                 aria-label="add to favorites">
                     <FavoriteIcon style = {isLiked? {color: "red"} : null}/>
                 { likeCount }
                 </IconButton>
+              }
                 <IconButton
                     expand={expanded}
                     onClick={handleExpandClick}
@@ -165,7 +178,8 @@ useEffect(() => {
                   isLoaded? commentList.map(comment => (
                     <Comment userId = {1} userName = {"USER"} text = {comment.text}></Comment>
                   )) : "Loading"}
-                  <CommentForm userId = {1} userName = {"USER"} postId = {postId}></CommentForm>
+                  {disabled? "":
+                  <CommentForm userId = {localStorage.getItem("currentUser")} userName = {localStorage.getItem("username")} postId = {postId}></CommentForm>}
                 </Container>
             </Collapse>
       </MyCard>

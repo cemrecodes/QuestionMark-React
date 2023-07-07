@@ -45,7 +45,7 @@ function Home(){
     else{
      return(
             <MyDiv>
-                <PostForm userId = {1} userName = {"cemre"}  refreshPosts = {refreshPosts}/>
+                {localStorage.getItem("currentUser") == null? "":<PostForm userId = {localStorage.getItem("currentUser")} userName = {localStorage.getItem("username")}  refreshPosts = {refreshPosts}/>}
                 { postList.map( 
                     post => (
                     <Post likes = {post.postLikes} postId = {post.id} userId = {post.userId} userName = {post.userName} 
